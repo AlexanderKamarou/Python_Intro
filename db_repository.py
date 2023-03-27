@@ -1,7 +1,12 @@
 import mysql.connector as connection
+import json
 
 
 class RoomRepository:
+    '''
+    Instances of this class make connections to the database,
+    and its methods make queries to the database and return result in JSON
+    '''
     def __init__(self, user, password, host, database):
         self.user = user
         self.password = password
@@ -21,9 +26,11 @@ class RoomRepository:
         # Make a disconnection
         self.db_connect.close()
 
-    def get_rooms_with_num_students(self) -> dict:
-        '''Connect to database and return all rooms and number of students
-        in that rooms'''
+    def get_rooms_with_num_students(self) -> json:
+        '''
+        Connect to database and return all rooms and number of students
+        in that rooms
+        '''
         self.connect()
         cursor = self.db_connect.cursor()
 
@@ -36,13 +43,16 @@ class RoomRepository:
         # Put the result into dict
         result = {}
         for row in cursor.fetchall(): # fetchall() return tuple(room, number_of_students)
-            result[row[0]] = row[1]
+            result[row[0]] = f'{row[1]} students'
 
         self.disconnect()
-        return result
+        output = json.dumps(result)
+        return output
 
-    def get_rooms_with_min_avg_age(self, limit: int = 5):
-        '''Connect to database and return 5(as a default) rooms with the smallest average age'''
+    def get_rooms_with_min_avg_age(self, limit: int = 5) -> json:
+        '''
+        Connect to database and return 5(as a default) rooms with the smallest average age
+        '''
         self.connect()
         cursor = self.db_connect.cursor()
 
@@ -53,12 +63,17 @@ class RoomRepository:
                     'ORDER BY avg_age ASC ' \
                     'LIMIT {limit}'.format(limit=limit)
 
+        result = {}
         cursor.execute(sql_query)
-        result = cursor.fetchall()
-        return result
+        for row in cursor.fetchall():
+            result[row[0]] = f'{row[1]} ages'
+        output = json.dumps(result)
+        return output
 
-    def get_rooms_with_age_diff(self, limit: int = 5):
-        '''Connect to database and return 5(as a default) rooms with the largest age difference'''
+    def get_rooms_with_age_diff(self, limit: int = 5) -> json:
+        '''
+        Connect to database and return 5(as a default) rooms with the largest age difference
+        '''
         self.connect()
         cursor = self.db_connect.cursor()
 
@@ -69,21 +84,28 @@ class RoomRepository:
                     'ORDER BY age_difference DESC ' \
                     'LIMIT {limit}'.format(limit=limit)
 
+        result = {}
         cursor.execute(sql_query)
-        result = cursor.fetchall()
-        return result
+        for row in cursor.fetchall():
+            result[row[0]] = f'{row[1]} ages'
+        output = json.dumps(result)
+        return output
 
-    def get_rooms_with_diff_genders(self):
-        '''Connect to database and return rooms with different gender students'''
+    def get_rooms_with_diff_genders(self) -> json:
+        '''
+        Connect to database and return all rooms with different gender students
+        '''
         self.connect()
         cursor = self.db_connect.cursor()
 
-        sql_query = 'SELECT DISTINCT rooms.name, ' \
+        sql_query = 'SELECT DISTINCT rooms.name ' \
                     'FROM rooms JOIN students ON rooms.id=students.room ' \
                     'WHERE EXISTS(SELECT * FROM students WHERE students.room=rooms.id AND students.sex="M") ' \
                     'AND EXISTS(SELECT * FROM students WHERE students.room=rooms.id AND students.sex="F")'
 
+        result = []
         cursor.execute(sql_query)
-        result = cursor.fetchall()
-        return result
-
+        for row in cursor.fetchall():
+            result.append(row[0])
+        output = json.dumps(result)
+        return output
