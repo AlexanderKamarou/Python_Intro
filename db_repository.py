@@ -21,7 +21,7 @@ class RoomRepository:
         # Make a disconnection
         self.db_connect.close()
 
-    def get_rooms_with_num_students(self):
+    def get_rooms_with_num_students(self) -> dict:
         '''Connect to database and return all rooms and number of students
         in that rooms'''
         self.connect()
@@ -41,7 +41,7 @@ class RoomRepository:
         self.disconnect()
         return result
 
-    def get_rooms_with_min_avg_age(self, limit=5):
+    def get_rooms_with_min_avg_age(self, limit: int = 5):
         '''Connect to database and return 5(as a default) rooms with the smallest average age'''
         self.connect()
         cursor = self.db_connect.cursor()
@@ -57,13 +57,13 @@ class RoomRepository:
         result = cursor.fetchall()
         return result
 
-    def get_rooms_with_age_diff(self, limit=5):
+    def get_rooms_with_age_diff(self, limit: int = 5):
         '''Connect to database and return 5(as a default) rooms with the largest age difference'''
         self.connect()
         cursor = self.db_connect.cursor()
 
         sql_query = 'SELECT rooms.name, ' \
-                    'MAX(YEAR(CURRENT_DATE()) - YEAR(students.birthday)) - MIN(YEAR(CURRENT_DATE() - YEAR(students.birthday)) as age_difference ' \
+                    'MAX(YEAR(CURRENT_DATE()) - YEAR(students.birthday)) - MIN(YEAR(CURRENT_DATE()) - YEAR(students.birthday)) as age_difference ' \
                     'FROM rooms LEFT JOIN students ON rooms.id=students.room ' \
                     'GROUP BY rooms.id ' \
                     'ORDER BY age_difference DESC ' \
