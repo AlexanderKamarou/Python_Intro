@@ -39,3 +39,8 @@ class RoomRepository:
         self.disconnect()
         return result
 
+    def get_rooms_with_min_avg_age(self, limit=5):
+        self.connect()
+        cursor = self.db_connect.cursor()
+
+        sql_query = 'SELECT rooms'
