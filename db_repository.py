@@ -1,6 +1,20 @@
 import mysql.connector as connection
 import json
+import logging
 
+
+# Logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+handler = logging.FileHandler('logfile.log')
+handler.setLevel(logging.INFO)
+
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+logger.info('Script is started')
 
 class RoomRepository:
     '''
@@ -109,3 +123,5 @@ class RoomRepository:
             result.append(row[0])
         output = json.dumps(result)
         return output
+
+logger.info('Script is finished')

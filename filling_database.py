@@ -1,7 +1,21 @@
 import json
 import mysql.connector as connection
 import os
+import logging
 
+
+# Logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+handler = logging.FileHandler('logfile.log')
+handler.setLevel(logging.INFO)
+
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+logger.info('Script is started')
 
 # Open JSON files with data
 with open ('students.json', 'r') as file_1, open ('rooms.json', 'r') as file_2:
@@ -37,3 +51,5 @@ for student in students:
 con_to_db.commit()
 cursor.close()
 con_to_db.close()
+
+logger.info('Script is finished')
