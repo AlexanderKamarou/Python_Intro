@@ -25,9 +25,9 @@ class RoomRepository:
         self.connect()
         cursor = self.db_connect.cursor()
 
-        sql_query = 'SELECT rooms.name, COUNT(students.id) as number_of_students' \
-                    'FROM rooms' \
-                    'INNER JOIN students ON rooms.id = students.room' \
+        sql_query = 'SELECT rooms.name, COUNT(students.id) as number_of_students ' \
+                    'FROM rooms ' \
+                    'INNER JOIN students ON rooms.id = students.room ' \
                     'GROUP BY rooms.id'
         cursor.execute(sql_query)
 
@@ -43,4 +43,9 @@ class RoomRepository:
         self.connect()
         cursor = self.db_connect.cursor()
 
-        sql_query = 'SELECT rooms'
+        sql_query = 'SELECT rooms.name, ' \
+                    'AVG(YEAR(CURRENT_DATE()) - YEAR(students.birthday)) as avg_age ' \
+                    'FROM rooms LEFT JOIN students ON rooms.id=students.room ' \
+                    'GROUP BY rooms.id ' \
+                    'ORDER BY avg_age ASC ' \
+                    'LIMIT {limit}'.format(limit=limit)
