@@ -24,10 +24,13 @@ with open ('students.json', 'r') as file_1, open ('rooms.json', 'r') as file_2:
 
 # Make a connection to database and cursor
 password = os.environ.get('PASSWORD_FOR_PYTHON_INTRO')
-con_to_db = connection.connect(user='alexander',
+user = os.environ.get('USER_FOR_PYTHON_INTRO')
+host = os.environ.get('HOST_FOR_PYTHON_INTRO')
+database_name = os.environ.get('DATABASE_FOR_PYTHON_INTRO')
+con_to_db = connection.connect(user=user,
                                password=password,
-                               host='localhost',
-                               database='python_intro')
+                               host=host,
+                               database=database_name)
 cursor = con_to_db.cursor()
 
 # Filling the rooms table
@@ -47,7 +50,7 @@ for student in students:
                                 student['room'])
     cursor.execute(sql_query_students, values_for_fill_students)
 
-# Commiting and closing connections
+# Commit and closing connections
 con_to_db.commit()
 cursor.close()
 con_to_db.close()
