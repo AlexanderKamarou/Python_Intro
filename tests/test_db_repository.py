@@ -2,7 +2,8 @@ import json
 import os
 import mysql.connector as connection
 from db_repository import RoomRepository
-
+import sqlite3
+import pytest
 
 
 password = os.environ.get('PASSWORD_FOR_PYTHON_INTRO')
@@ -31,5 +32,3 @@ def test_get_rooms_with_num_students():
 
     assert len(result) == number_of_rooms, \
         f"The number of real records {number_of_rooms}, records returned by the function is {len(result)}"
-
-

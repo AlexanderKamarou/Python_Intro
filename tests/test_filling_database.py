@@ -56,7 +56,7 @@ def test_insert_data_is_correct():
         f"Number of students in some rooms in query is greater than total number of students ({result})"
 
     # Check that all rooms have correct names and unique IDs
-    with open('rooms.json', 'r') as file:
+    with open('/home/user/Traning_Projects/1_Python_Introduction/rooms.json', 'r') as file:
         rooms_from_file = json.load(file)
     rooms_from_db = {}
     cursor = connect_to_db.cursor()
@@ -76,7 +76,7 @@ def test_insert_data_is_correct():
             f"Room with ID {room['id']} in the database has a different name than in the JSON file"
 
     # Check that all students have correct data and unique IDs
-    with open('students.json', 'r') as file:
+    with open('/home/user/Traning_Projects/1_Python_Introduction/students.json', 'r') as file:
         students_from_file = json.load(file)
     students_from_db = {}
     cursor = connect_to_db.cursor()
