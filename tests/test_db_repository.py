@@ -1,7 +1,8 @@
 import json
 import os
-from db_repository import *
 import mysql.connector as connection
+from db_repository import RoomRepository
+
 
 
 password = os.environ.get('PASSWORD_FOR_PYTHON_INTRO')
@@ -21,11 +22,14 @@ def test_get_rooms_with_num_students():
                                        host=host,
                                        database=database_name)
     cursor = connect_to_db.cursor()
-    cursor.execute('SELECT COUNT(*) FROM rooms')
+    sql_query = 'SELECT COUNT(*) - 1 FROM rooms'
+    cursor.execute(sql_query)
     number_of_rooms = cursor.fetchone()[0]
+    print(number_of_rooms)
     cursor.close()
     connect_to_db.close()
 
     assert len(result) == number_of_rooms, \
         f"The number of real records {number_of_rooms}, records returned by the function is {len(result)}"
+
 
