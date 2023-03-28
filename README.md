@@ -35,6 +35,3 @@ To use the scripts, clone the repository and install the necessary dependencies 
 
 ## Usage
 To fill the database with data from JSON files, run the `filling_database.py` script. To query the database, create an instance of the `RoomRepository` class and use its methods.
-
-## License
-This project is licensed under the MIT License - see the `LICENSE.md` file for details.
